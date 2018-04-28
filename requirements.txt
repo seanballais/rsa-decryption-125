@@ -5,3 +5,15 @@
 # numpy==1.13.3
 # scipy==1.0
 
+astroid==1.6.3
+autopep8==1.3.5
+isort==4.3.4
+lazy-object-proxy==1.3.1
+mccabe==0.6.1
+pycodestyle==2.4.0
+pylint==1.8.4
+PyScaffold==3.0.3
+rope==0.10.7
+-e git+https://github.com/seanballais/rsa-decryption-125.git@d981b141f85fff8f5555c028352650360ea32f4a#egg=rsa_decryption_125
+six==1.11.0
+wrapt==1.10.11

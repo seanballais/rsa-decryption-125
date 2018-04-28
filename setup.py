@@ -14,9 +14,7 @@ from setuptools import setup
 # Add here console scripts and other entry points in ini-style format
 entry_points = """
 [console_scripts]
-# script_name = rsa_decryption_125.module:function
-# For example:
-# fibonacci = rsa_decryption_125.skeleton:run
+rsa_decryption_125 = rsa_decryption_125.app:main
 """
 
 
