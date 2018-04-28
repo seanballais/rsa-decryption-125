@@ -30,7 +30,7 @@ def obtain_d(e, phi):
     # Reference: https://www.youtube.com/watch?v=4-HSjLXrfPs
     gcd, x, y = extended_euclidean_algorithm(e, phi)
 
-    return 253825
+    return x
 
 
 def decrypt(cipher, n, e):
@@ -46,16 +46,13 @@ def decrypt(cipher, n, e):
     decrypted_message = ''
     block_counter = 0
     block_length = 6
-    print('Values')
-    print('d: {}'.format(d))
-    print('phi: {}'.format(phi))
     while block_counter < len(cipher):
         block = cipher[block_counter: block_counter + block_length]
 
         decrypted_block = str((int(block) ** d) % n)
 
-        if len(decrypted_block) % 2 != 0:
-            decrypted_block = '0' + decrypted_block
+        if len(decrypted_block) != block_length:
+            decrypted_block = '0' * (block_length - len(decrypted_block)) + decrypted_block
 
         decrypted_message += decrypted_block
         block_counter += block_length
@@ -65,7 +62,6 @@ def decrypt(cipher, n, e):
 
 def decode_message(message):
     message_str = str(message)
-    print('Message: {}'.format(message_str))
 
     if len(message_str) % 2 != 0:
         # The front of the string should prolly be a zero.
@@ -80,6 +76,11 @@ def decode_message(message):
 
         if 1 <= int(encoded_char) <= 26:
             message += chr(int(encoded_char) + 96)  # We start at 96 since a == '01'.
+        else:
+            try:
+                message += symbol_encoding[encoded_char]
+            except KeyError:
+                raise ValueError('Unknown encoded character, \'{}\'. Limit encoding from 00 to 29.'.format(encoded_char))
 
         letter_counter += letter_length
 
@@ -88,14 +89,12 @@ def decode_message(message):
 
 def extended_euclidean_algorithm(b, a):
     # Code from:
-    # https://brilliant.org/wiki/extended-euclidean-algorithm/
+    # https: // en.wikibooks.org/wiki/Algorithm_Implementation/Mathematics/Extended_Euclidean_algorithm
     # Still trying to understand the math behind this.
-    x, y, u, v = 0, 1, 1, 0
+    x0, x1, y0, y1 = 1, 0, 0, 1
     while a != 0:
-        q, r = b // a, b % a
-        m, n = x - u * q, y - v * q
-        b, a, x, y, u, v = a, r, u, v, m, n
-    
-    gcd = b
+        q, b, a = b // a, a, b % a
+        x0, x1 = x1, x0 - q * x1
+        y0, y1 = y1, y0 - q * y1
 
-    return gcd, x, y
+    return  b, x0, y0
